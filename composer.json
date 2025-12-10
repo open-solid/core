@@ -5,12 +5,13 @@
     "description": "Building Blocks for Modular Architecture with Symfony",
     "minimum-stability": "stable",
     "require": {
-        "php": ">=8.4",
-        "symfony/framework-bundle": "^7.0|^8.0"
+        "php": ">=8.4"
     },
     "require-dev": {
         "doctrine/doctrine-bundle": "^3.1",
-        "doctrine/orm": "^3.5"
+        "doctrine/orm": "^3.5",
+        "phpunit/phpunit": "^12.5",
+        "symfony/framework-bundle": "^8.0"
     },
     "config": {
         "sort-packages": true

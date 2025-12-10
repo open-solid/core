@@ -8,12 +8,16 @@ use Symfony\Component\Config\Definition\Configurator\DefinitionConfigurator;
 return static function (DefinitionConfigurator $definition): void {
     $definition
         ->rootNode()
+            ->addDefaultsIfNotSet()
             ->children()
                 ->arrayNode('doctrine')
+                    ->addDefaultsIfNotSet()
                     ->children()
                         ->arrayNode('orm')
+                            ->addDefaultsIfNotSet()
                             ->children()
                                 ->arrayNode('mapping')
+                                    ->addDefaultsIfNotSet()
                                     ->children()
                                         ->scalarNode('type')->defaultValue('xml')->end()
                                         ->scalarNode('relative_path')->defaultValue('/Infrastructure/Resources/config/doctrine/mapping/')->end()
