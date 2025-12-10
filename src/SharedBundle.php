@@ -9,7 +9,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 
-class Shared extends AbstractBundle
+class SharedBundle extends AbstractBundle
 {
     protected string $extensionAlias = 'opensolid_shared';
 
