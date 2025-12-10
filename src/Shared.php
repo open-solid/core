@@ -7,11 +7,10 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 
-/**
- * @link https://symfony.com/doc/current/bundles/best_practices.html
- */
 class Shared extends AbstractBundle
 {
+    protected string $extensionAlias = 'opensolid_shared';
+
     public function configure(DefinitionConfigurator $definition): void
     {
         $definition->import('../config/definition.php');
