@@ -45,19 +45,17 @@ abstract class ModuleExtension extends AbstractExtension
 
         /** @var AbstractExtension $extension */
         $extension = $builder->getExtension('opensolid_shared');
-
-        if (!$config = new Processor()->processConfiguration($extension->getConfiguration([], $builder), $builder->getExtensionConfig('opensolid_shared'))) {
-            $config = [
-                'doctrine' => [
-                    'orm' => [
-                        'mapping' => [
-                            'type' => 'xml',
-                            'relative_path' => '/Infrastructure/Resources/config/doctrine/mapping/',
-                        ],
+        $default = [
+            'doctrine' => [
+                'orm' => [
+                    'mapping' => [
+                        'type' => 'xml',
+                        'relative_path' => '/Infrastructure/Resources/config/doctrine/mapping/',
                     ],
                 ],
-            ];
-        }
+            ],
+        ];
+        $config = new Processor()->processConfiguration($extension->getConfiguration([], $builder), $builder->getExtensionConfig('opensolid_shared') ?: [$default]);
 
         if (!\is_dir($dir = $this->path.$config['doctrine']['orm']['mapping']['relative_path'])) {
             mkdir($dir, 0750, true);
