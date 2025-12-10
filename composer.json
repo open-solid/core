@@ -1,0 +1,24 @@
+{
+    "name": "open-solid/shared",
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "description": "SBuilding Blocks for Modular Architecture with Symfony",
+    "minimum-stability": "stable",
+    "require": {
+        "php": ">=8.1",
+        "symfony/framework-bundle": "^6.4|^7.0"
+    },
+    "config": {
+        "sort-packages": true
+    },
+    "autoload": {
+        "psr-4": {
+            "OpenSolid\\Shared\\": "src/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "OpenSolid\\Shared\\Tests\\": "tests/"
+        }
+    }
+}
