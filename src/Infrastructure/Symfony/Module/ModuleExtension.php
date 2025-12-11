@@ -51,7 +51,7 @@ abstract class ModuleExtension extends AbstractExtension
         }
 
         /** @var AbstractExtension $extension */
-        $extension = $builder->getExtension('opensolid_shared');
+        $extension = $builder->getExtension('opensolid');
         $config = new Processor()->processConfiguration($extension->getConfiguration([], $builder), $builder->getExtensionConfig('opensolid_shared'));
 
         if (!\is_dir($dir = $this->path.$config['doctrine']['orm']['mapping']['relative_path'])) {
