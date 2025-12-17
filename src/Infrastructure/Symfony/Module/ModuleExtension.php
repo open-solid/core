@@ -83,7 +83,7 @@ abstract class ModuleExtension extends AbstractExtension
         }
 
         $container->extension('api_platform', [
-            'mappings' => [
+            'mapping' => [
                 'paths' => [$dir],
             ],
         ], true);
