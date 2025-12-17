@@ -33,7 +33,7 @@ class SharedBundleConfigurationTest extends TestCase
             'api_platform' => [
                 'resources' => [
                     'mapping' => [
-                        'relative_path' => '/Infrastructure/Resources/config/api_platform',
+                        'relative_path' => '/Infrastructure/Resources/config/api_platform/mapping/',
                     ],
                 ],
             ],

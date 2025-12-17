@@ -34,7 +34,7 @@ return static function (DefinitionConfigurator $definition): void {
                                 ->arrayNode('mapping')
                                     ->addDefaultsIfNotSet()
                                     ->children()
-                                        ->scalarNode('relative_path')->defaultValue('/Infrastructure/Resources/config/api_platform')->end()
+                                        ->scalarNode('relative_path')->defaultValue('/Infrastructure/Resources/config/api_platform/mapping/')->end()
                                     ->end()
                                 ->end()
                             ->end()
