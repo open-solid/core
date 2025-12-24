@@ -1,0 +1,40 @@
+parameters:
+    level: 9
+    paths:
+        - src
+        - tests
+    tmpDir: var/cache/phpstan
+    ignoreErrors:
+        # Traits are analyzed in context of the classes that use them
+        - identifier: trait.unused
+        # Test doubles don't need generic type parameters
+        -
+            identifier: missingType.generics
+            path: tests/*
+        # Test classes intentionally pass wrong types to verify error handling
+        -
+            identifier: argument.type
+            path: tests/*
+        # Symfony bundle configuration arrays are dynamically typed
+        -
+            identifier: offsetAccess.nonOffsetAccessible
+            path: src/*
+        # Symfony bundle configuration arrays use mixed types
+        -
+            identifier: binaryOp.invalid
+            path: src/Infrastructure/Symfony/Module/ModuleExtension.php
+        # ReflectionClass::getFileName() can return false but we control the context
+        -
+            message: '#Parameter \#1 \$path of function dirname expects string, string\|false given#'
+            path: src/Infrastructure/Symfony/Module/ModuleExtension.php
+        # preg_replace can return null but pattern is valid
+        -
+            message: '#Get hook for property .* should return string but returns string\|null#'
+            path: src/Infrastructure/Symfony/Module/ModuleExtension.php
+        -
+            message: '#Property .* does not accept string\|null#'
+            path: src/Infrastructure/Symfony/Module/ModuleExtension.php
+        # ExtensionInterface doesn't have getConfiguration but we assert it's AbstractExtension
+        -
+            identifier: method.notFound
+            path: tests/CoreBundleConfigurationTest.php
