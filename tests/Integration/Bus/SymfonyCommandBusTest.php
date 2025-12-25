@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace OpenSolid\Core\Tests\Integration\Bus;
 
 use OpenSolid\Core\Application\Command\Message\Command;
-use OpenSolid\Core\Domain\Envelop\Attribute\Envelope as EnvelopeAttribute;
 use OpenSolid\Core\Domain\Envelop\Stamp\TransportStamp;
 use OpenSolid\Core\Infrastructure\Bus\Command\Error\NoHandlerForCommand;
 use OpenSolid\Core\Infrastructure\Bus\Command\SymfonyCommandBus;
@@ -140,7 +139,7 @@ final readonly class TestIntegrationCommand extends Command
 {
 }
 
-#[EnvelopeAttribute([new TransportStamp('async')])]
+#[TransportStamp('async')]
 final readonly class TestAsyncCommand extends Command
 {
 }

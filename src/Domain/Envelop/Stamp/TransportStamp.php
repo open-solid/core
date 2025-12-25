@@ -6,6 +6,7 @@ namespace OpenSolid\Core\Domain\Envelop\Stamp;
 
 use OpenSolid\Bus\Envelope\Stamp\Stamp;
 
+#[\Attribute(\Attribute::TARGET_CLASS | \Attribute::IS_REPEATABLE)]
 readonly class TransportStamp extends Stamp
 {
     /**

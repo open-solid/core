@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace OpenSolid\Core\Tests\Integration\Bus;
 
-use OpenSolid\Core\Domain\Envelop\Attribute\Envelope as EnvelopeAttribute;
 use OpenSolid\Core\Domain\Envelop\Stamp\TransportStamp;
 use OpenSolid\Core\Domain\Event\Message\DomainEvent;
 use OpenSolid\Core\Infrastructure\Bus\Envelop\Stamp\Transformer\ChainStampTransformer;
@@ -115,7 +114,7 @@ final readonly class TestIntegrationEvent extends DomainEvent
 {
 }
 
-#[EnvelopeAttribute([new TransportStamp('async')])]
+#[TransportStamp('async')]
 final readonly class TestAsyncEvent extends DomainEvent
 {
 }

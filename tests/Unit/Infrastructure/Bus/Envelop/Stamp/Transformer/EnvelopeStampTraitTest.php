@@ -4,8 +4,6 @@ declare(strict_types=1);
 
 namespace OpenSolid\Core\Tests\Unit\Infrastructure\Bus\Envelop\Stamp\Transformer;
 
-use OpenSolid\Bus\Envelope\Stamp\Stamp;
-use OpenSolid\Core\Domain\Envelop\Attribute\Envelope as EnvelopeAttribute;
 use OpenSolid\Core\Domain\Envelop\Stamp\TransportStamp;
 use OpenSolid\Core\Infrastructure\Bus\Envelop\Stamp\Transformer\EnvelopeStampTrait;
 use OpenSolid\Core\Infrastructure\Bus\Envelop\Stamp\Transformer\StampTransformer;
@@ -100,12 +98,13 @@ class MessageWithoutEnvelope
 {
 }
 
-#[EnvelopeAttribute([new TransportStamp('async')])]
+#[TransportStamp('async')]
 class MessageWithEnvelope
 {
 }
 
-#[EnvelopeAttribute([new TransportStamp('async'), new TransportStamp('sync')])]
+#[TransportStamp('async')]
+#[TransportStamp('sync')]
 class MessageWithMultipleStamps
 {
 }
