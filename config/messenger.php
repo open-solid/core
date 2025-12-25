@@ -19,6 +19,7 @@ use function Symfony\Component\DependencyInjection\Loader\Configurator\tagged_it
 return static function (ContainerConfigurator $container) {
     $container->services()
         ->set('envelope.stamp_transformer.default', DefaultStampTransformer::class)
+            ->tag('envelope.stamp_transformer')
 
         ->set('envelope.stamp_transformer.chain', ChainStampTransformer::class)
             ->args([
