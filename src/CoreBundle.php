@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace OpenSolid\Core;
 
+use Doctrine\ORM\Events;
 use OpenSolid\Bus\Bridge\Symfony\DependencyInjection\CompilerPass\HandlingMiddlewarePass;
 use OpenSolid\Bus\Bridge\Symfony\DependencyInjection\Configurator\MessageHandlerConfigurator;
 use OpenSolid\Core\Application\Command\Handler\Attribute\AsCommandHandler;
@@ -46,7 +47,9 @@ class CoreBundle extends AbstractBundle
      */
     public function loadExtension(array $config, ContainerConfigurator $container, ContainerBuilder $builder): void
     {
-        $container->import('../config/services.php');
+        if (class_exists(Events::class)) {
+            $container->import('../config/services.php');
+        }
 
         if ('native' === $config['bus']['strategy']) {
             MessageHandlerConfigurator::configure($builder, AsCommandHandler::class, 'cqs.command.handler');

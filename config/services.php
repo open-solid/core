@@ -6,10 +6,6 @@ use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigura
 
 return static function (ContainerConfigurator $container): void {
     $container
-        ->parameters()
-            // ->set('open.param_name', 'param_value');
-    ;
-    $container
         ->services()
             ->set(AutoMapGenericTypes::class)
                 ->tag('doctrine.event_listener', ['event' => Events::loadClassMetadata])
