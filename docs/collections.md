@@ -1,6 +1,7 @@
 # Collections
 
-OpenSolid Core provides collection interfaces and implementations that extend Doctrine Collections, giving you a rich API for working with sets of domain objects.
+OpenSolid Core provides collection interfaces and implementations that extend Doctrine Collections, giving you a rich
+API for working with sets of domain objects.
 
 ## Collection Interface
 
@@ -15,11 +16,13 @@ interface ProductCollection extends Collection
 }
 ```
 
-This gives you access to methods like `filter()`, `map()`, `reduce()`, `first()`, `last()`, `count()`, `isEmpty()`, `exists()`, `forAll()`, `matching()`, and more.
+This gives you access to methods like `filter()`, `map()`, `reduce()`, `first()`, `last()`, `count()`, `isEmpty()`,
+`exists()`, `forAll()`, `matching()`, and more.
 
 ## ReadonlyCollection
 
-A readonly wrapper around any Doctrine Collection. Use it when you want to expose a collection without allowing modifications:
+A readonly wrapper around any Doctrine Collection. Use it when you want to expose a collection without allowing
+modifications:
 
 ```php
 use OpenSolid\Core\Domain\Repository\ReadonlyCollection;
@@ -33,7 +36,8 @@ class Order
 }
 ```
 
-`ReadonlyCollection` implements the full `Collection` interface (read operations only). Methods that return collections (like `filter()`, `map()`, `matching()`) return new `ReadonlyCollection` instances, preserving immutability.
+`ReadonlyCollection` implements the full `Collection` interface (read operations only). Methods that return
+collections (like `filter()`, `map()`, `matching()`) return new `ReadonlyCollection` instances, preserving immutability.
 
 ### Available Operations
 
@@ -90,21 +94,17 @@ $products->removeElement($someProduct);
 $products->filter(fn (Product $p) => $p->price > 10);
 ```
 
-Since `InMemoryCollection` extends `ArrayCollection`, it supports both read and write operations, making it ideal for in-memory repository implementations in tests:
+Since `InMemoryCollection` extends `ArrayCollection`, it supports both read and write operations, making it ideal for
+in-memory repository implementations in tests:
 
 ```php
 /** @extends InMemoryCollection<int, User> */
 class InMemoryUserRepository extends InMemoryCollection implements UserRepository
 {
-    public function save(User $user): void
-    {
-        $this->add($user);
-    }
-
-    public function findByEmail(string $email): ?User
+    public function findByEmail(UserEmail $email): ?User
     {
         return $this->findFirst(
-            fn ($key, User $user) => $user->email === $email
+            fn ($key, User $user) => $user->email->equals($email)
         );
     }
 }
@@ -112,7 +112,8 @@ class InMemoryUserRepository extends InMemoryCollection implements UserRepositor
 
 ## GetOrCreateResource
 
-A utility class for "get or create" patterns. It wraps a resource and indicates whether it was newly created or already existed:
+A utility class for "get or create" patterns. It wraps a resource and indicates whether it was newly created or already
+existed:
 
 ```php
 use OpenSolid\Core\Application\Command\Handler\Attribute\AsCommandHandler;
