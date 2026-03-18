@@ -71,8 +71,7 @@ class ProductExtension extends ModuleExtension
     {
         parent::loadExtension($config, $container, $builder);
 
-        // Additional service configuration
-        $container->import($this->path.'/Infrastructure/Resources/config/custom_services.yaml');
+        // Additional service configuration ...
     }
 }
 ```
