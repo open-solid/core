@@ -22,6 +22,13 @@ final readonly class UserRegistered extends DomainEvent
 }
 ```
 
+Domain events are dispatched asynchronously by default through the `async` transport when using the `symfony` bus
+strategy. This ensures that event subscribers do not block the main request.
+
+> **Note:** Events routed to async transports are serialized for message queue delivery. Use **primitive types** (`string`,
+> `int`, `float`, `bool`) for their properties instead of value objects to ensure proper serialization.
+
+
 Every domain event automatically receives:
 
 | Property       | Type                | Description                                        |
@@ -32,19 +39,9 @@ Every domain event automatically receives:
 
 ## EventBus
 
-The `EventBus` interface publishes domain events:
-
-```php
-use OpenSolid\Core\Domain\Event\Bus\EventBus;
-
-interface EventBus
-{
-    public function publish(DomainEvent ...$events): void;
-}
-```
-
-When using the `symfony` bus strategy, domain events are automatically published by Messenger middleware after the
-command handler completes successfully — you don't need to call `publish()` manually.
+The `EventBus` interface publishes domain events. When using the `symfony` bus strategy, domain events are automatically
+published by Messenger middleware after the command handler completes successfully — you don't need to call `publish()`
+manually.
 
 ## InMemoryEventStore
 
@@ -59,22 +56,26 @@ class User
     use InMemoryEventStore;
 
     private function __construct(
-        public readonly string $id,
-        public readonly string $email,
-        public string $name,
+        private(set) UserId $id,
+        private(set) UserEmail $email,
+        private(set) UserName $name,
     ) {
     }
 
-    public static function register(string $email, string $name): self
+    public static function register(UserEmail $email, UserName $name): self
     {
-        $user = new self(Uuid::v7()::generate(), $email, $name);
-        $user->pushDomainEvent(new UserRegistered($user->id, $email, $name));
+        $user = new self(UserId::create(), $email, $name);
+        $user->pushDomainEvent(new UserRegistered($user->id->value, $email->value, $name->value));
 
         return $user;
     }
 
-    public function rename(string $name): void
+    public function rename(UserName $name): void
     {
+        if ($this->name->equals($name)) {
+            return; // no change, so no event
+        }
+    
         $this->name = $name;
         $this->pushDomainEvent(new UserRenamed($this->id, $name));
     }
@@ -99,10 +100,10 @@ Mark a class with `#[AsDomainEventSubscriber]` to register it as an event subscr
 use OpenSolid\Core\Infrastructure\Bus\Event\Subscriber\Attribute\AsDomainEventSubscriber;
 
 #[AsDomainEventSubscriber]
-readonly class SendWelcomeEmailOnUserRegistered
+final readonly class SendWelcomeEmailOnUserRegistered
 {
     public function __construct(
-        private Mailer $mailer,
+        private MailerInterface $mailer,
     ) {
     }
 
@@ -116,9 +117,6 @@ readonly class SendWelcomeEmailOnUserRegistered
 Subscribers are auto-discovered and configured. The handler method parameter type determines which event it subscribes
 to.
 
-Domain events are always dispatched asynchronously through the `async` transport by default when using the `symfony` bus
-strategy. This ensures that event subscribers do not block the main request.
-
 ### Routing to Additional Transports
 
 Use the `#[TransportStamp]` attribute to route a domain event to additional transports beyond the default `async`:
@@ -127,76 +125,17 @@ Use the `#[TransportStamp]` attribute to route a domain event to additional tran
 use OpenSolid\Core\Domain\Envelop\Stamp\TransportStamp;
 use OpenSolid\Core\Domain\Event\Message\DomainEvent;
 
-#[TransportStamp('audit')]
+#[TransportStamp(['async', 'audit'])]
 final readonly class PaymentReceived extends DomainEvent
 {
     public function __construct(
         string $aggregateId,
         public float $amount,
+        public string $currency,
     ) {
         parent::__construct($aggregateId);
     }
 }
 ```
 
-You can specify multiple transports:
-
-```php
-#[TransportStamp(['audit', 'analytics'])]
-```
-
-## Full Example
-
-```php
-// 1. Define the event
-readonly class ProductCreated extends DomainEvent
-{
-    public function __construct(
-        string $aggregateId,
-        public string $name,
-    ) {
-        parent::__construct($aggregateId);
-    }
-}
-
-// 2. Raise it from your entity
-class Product
-{
-    use InMemoryEventStore;
-
-    public static function create(string $name): self
-    {
-        $product = new self(Uuid::v7()::generate(), $name);
-        $product->pushDomainEvent(new ProductCreated($product->id, $name));
-
-        return $product;
-    }
-}
-
-// 3. Handle the command — events are published automatically by middleware
-#[AsCommandHandler]
-readonly class CreateProductHandler
-{
-    public function __construct(
-        private ProductRepository $products,
-    ) {
-    }
-
-    public function __invoke(CreateProduct $command): void
-    {
-        $product = Product::create($command->name);
-
-        $this->products->add($product);
-    }
-}
-
-// 4. React to the event
-#[AsDomainEventSubscriber]
-readonly class NotifyOnProductCreated
-{
-    public function __invoke(ProductCreated $event): void
-    {
-        // send notification, update read model, etc.
-    }
-}
-```
+See also [Commands & Queries — Routing Commands to Transports](commands-and-queries.md#routing-commands-to-transports) for routing commands to async transports.
