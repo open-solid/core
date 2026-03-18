@@ -65,9 +65,7 @@ The handler is auto-discovered and configured — no manual service tagging requ
 
 ### CommandBus
 
-The `CommandBus` interface dispatches commands to their handlers.
-
-Inject it wherever you need to dispatch commands:
+The `CommandBus` interface dispatches commands to their handlers. Inject it wherever you need to dispatch commands:
 
 ```php
 final readonly class CreateOrderAction
