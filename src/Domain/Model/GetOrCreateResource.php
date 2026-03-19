@@ -34,6 +34,18 @@ final readonly class GetOrCreateResource
     }
 
     /**
+     * @template TNew of object
+     *
+     * @param TNew $resource
+     *
+     * @return self<TNew>
+     */
+    public function map(object $resource): self
+    {
+        return new self($resource, created: $this->created, existing: $this->existing);
+    }
+
+    /**
      * @param T $resource
      */
     private function __construct(
