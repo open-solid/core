@@ -36,7 +36,7 @@ final readonly class GetOrCreateResource
     /**
      * @param T $resource
      */
-    private function __construct(
+    public function __construct(
         public object $resource,
         public bool $created = false,
         public bool $existing = false,
