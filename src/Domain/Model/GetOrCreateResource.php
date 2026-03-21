@@ -36,10 +36,22 @@ final readonly class GetOrCreateResource
     /**
      * @param T $resource
      */
-    public function __construct(
+    private function __construct(
         public object $resource,
         public bool $created = false,
         public bool $existing = false,
     ) {
+    }
+
+    /**
+     * @template TMapped of object
+     *
+     * @param \Closure(T): TMapped $mapper
+     *
+     * @return self<TMapped>
+     */
+    public function map(\Closure $mapper): self
+    {
+        return new self($mapper($this->resource), $this->created, $this->existing);
     }
 }
