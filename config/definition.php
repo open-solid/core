@@ -31,7 +31,7 @@ return static function (DefinitionConfigurator $definition): void {
                         ->arrayNode('templates')
                             ->addDefaultsIfNotSet()
                             ->children()
-                                ->scalarNode('relative_path')->defaultValue('/Resources/templates')->end()
+                                ->scalarNode('relative_path')->defaultValue('/Presentation/Resources/templates')->end()
                             ->end()
                         ->end()
                     ->end()
