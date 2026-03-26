@@ -27,6 +27,7 @@ abstract class ModuleExtension extends AbstractExtension
     {
         $config = $this->getConfig($builder);
 
+        $this->configureTwigTemplates($container, $builder, $config);
         $this->configureDoctrineMapping($container, $builder, $config);
         $this->configureApiPlatformResources($container, $builder, $config);
 
@@ -48,6 +49,24 @@ abstract class ModuleExtension extends AbstractExtension
     public function getAlias(): string
     {
         return 'app_'.parent::getAlias();
+    }
+
+    /**
+     * @param array<string, mixed> $config
+     */
+    protected function configureTwigTemplates(ContainerConfigurator $container, ContainerBuilder $builder, array $config): void
+    {
+        if (!$builder->hasExtension('twig') || !\is_dir($dir = $this->path.$config['twig']['templates']['relative_path'])) {
+            return;
+        }
+
+        $moduleName = preg_replace('/Extension$/', '', new \ReflectionClass($this)->getShortName());
+
+        $container->extension('twig', [
+            'paths' => [
+                $dir => $moduleName,
+            ],
+        ], true);
     }
 
     /**

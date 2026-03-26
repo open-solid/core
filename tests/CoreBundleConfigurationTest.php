@@ -33,6 +33,11 @@ class CoreBundleConfigurationTest extends TestCase
                     ],
                 ],
             ],
+            'twig' => [
+                'templates' => [
+                    'relative_path' => '/Resources/templates',
+                ],
+            ],
             'api_platform' => [
                 'resources' => [
                     'mapping' => [
@@ -66,6 +71,11 @@ class CoreBundleConfigurationTest extends TestCase
                         ],
                     ],
                 ],
+                'twig' => [
+                    'templates' => [
+                        'relative_path' => '/Presentation/templates',
+                    ],
+                ],
                 'api_platform' => [
                     'resources' => [
                         'mapping' => [
@@ -86,6 +96,11 @@ class CoreBundleConfigurationTest extends TestCase
                         'type' => 'attribute',
                         'relative_path' => '/Domain/Model/',
                     ],
+                ],
+            ],
+            'twig' => [
+                'templates' => [
+                    'relative_path' => '/Presentation/templates',
                 ],
             ],
             'api_platform' => [
