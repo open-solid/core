@@ -38,6 +38,11 @@ class CoreBundleConfigurationTest extends TestCase
                     'relative_path' => '/Presentation/Resources/templates',
                 ],
             ],
+            'translation' => [
+                'translations' => [
+                    'relative_path' => '/Presentation/Resources/translations',
+                ],
+            ],
             'api_platform' => [
                 'resources' => [
                     'mapping' => [
@@ -76,6 +81,11 @@ class CoreBundleConfigurationTest extends TestCase
                         'relative_path' => '/UI/Resources/templates',
                     ],
                 ],
+                'translation' => [
+                    'translations' => [
+                        'relative_path' => '/UI/Resources/translations',
+                    ],
+                ],
                 'api_platform' => [
                     'resources' => [
                         'mapping' => [
@@ -101,6 +111,11 @@ class CoreBundleConfigurationTest extends TestCase
             'twig' => [
                 'templates' => [
                     'relative_path' => '/UI/Resources/templates',
+                ],
+            ],
+            'translation' => [
+                'translations' => [
+                    'relative_path' => '/UI/Resources/translations',
                 ],
             ],
             'api_platform' => [

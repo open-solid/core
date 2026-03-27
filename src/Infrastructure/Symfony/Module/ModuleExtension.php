@@ -28,6 +28,7 @@ abstract class ModuleExtension extends AbstractExtension
         $config = $this->getConfig($builder);
 
         $this->configureTwigTemplates($container, $builder, $config);
+        $this->configureTranslations($container, $builder, $config);
         $this->configureDoctrineMapping($container, $builder, $config);
         $this->configureApiPlatformResources($container, $builder, $config);
 
@@ -65,6 +66,22 @@ abstract class ModuleExtension extends AbstractExtension
         $container->extension('twig', [
             'paths' => [
                 $dir => $moduleName,
+            ],
+        ], true);
+    }
+
+    /**
+     * @param array<string, mixed> $config
+     */
+    protected function configureTranslations(ContainerConfigurator $container, ContainerBuilder $builder, array $config): void
+    {
+        if (!$builder->hasExtension('framework') || !\is_dir($dir = $this->path.$config['translation']['translations']['relative_path'])) {
+            return;
+        }
+
+        $container->extension('framework', [
+            'translator' => [
+                'paths' => [$dir],
             ],
         ], true);
     }
