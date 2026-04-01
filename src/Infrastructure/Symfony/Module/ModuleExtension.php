@@ -30,7 +30,6 @@ abstract class ModuleExtension extends AbstractExtension
         $this->configureTwigTemplates($container, $builder, $config);
         $this->configureTranslations($container, $builder, $config);
         $this->configureDoctrineMapping($container, $builder, $config);
-        $this->configureApiPlatformResources($container, $builder, $config);
 
         if (\is_dir($this->path.'/Infrastructure/Resources/config/packages')) {
             $container->import($this->path.'/Infrastructure/Resources/config/packages/*.yaml');
@@ -110,27 +109,6 @@ abstract class ModuleExtension extends AbstractExtension
                         'alias' => $this->namespace.'\\Domain\\Model',
                     ],
                 ],
-            ],
-        ], true);
-    }
-
-    /**
-     * @param array<string, mixed> $config
-     */
-    private function configureApiPlatformResources(ContainerConfigurator $container, ContainerBuilder $builder, array $config): void
-    {
-        if (!$builder->hasExtension('api_platform')) {
-            return;
-        }
-
-        if (!\is_dir($dir = $this->path.$config['api_platform']['resources']['mapping']['relative_path'])) {
-            mkdir($dir, 0750, true);
-        }
-
-        $container->extension('api_platform', [
-            'mapping' => [
-                'imports' => [$dir],
-                'paths' => [$dir],
             ],
         ], true);
     }

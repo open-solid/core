@@ -7,7 +7,6 @@ The bundle is configured under the `opensolid` key in your Symfony configuration
 ```yaml
 # config/packages/opensolid.yaml
 opensolid:
-
     bus:
         # The bus strategy to use for dispatching messages.
         # - "symfony": Uses Symfony Messenger (requires symfony/messenger)
@@ -23,12 +22,6 @@ opensolid:
 
                 # Relative path (from the module root) to the Doctrine mapping files.
                 relative_path: /Infrastructure/Resources/config/doctrine/mapping/  # default
-
-    api_platform:
-        resources:
-            mapping:
-                # Relative path (from the module root) to the API Platform resource files.
-                relative_path: /Infrastructure/Resources/config/api_platform/mapping/  # default
 ```
 
 ## Bus Strategy
@@ -70,10 +63,6 @@ The mapping format. Default: `xml`. Common values: `xml`, `attribute`, `yaml`.
 The directory (relative to the module root) where mapping files are located. Default: `/Infrastructure/Resources/config/doctrine/mapping/`.
 
 This path is used by `ModuleExtension` to register Doctrine mappings automatically. The directory is created if it doesn't exist.
-
-## API Platform Resources
-
-The `api_platform.resources.mapping.relative_path` controls where API Platform resource definitions are located within each module. Default: `/Infrastructure/Resources/config/api_platform/mapping/`.
 
 ## Example: Minimal Configuration
 

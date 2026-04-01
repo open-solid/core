@@ -24,8 +24,6 @@ src/
     └── Infrastructure/         
         ├── Resources/         
         │   └── config/         
-        │       ├── api_platform/         
-        │       │   └── mapping/               # API Platform resources
         │       ├── doctrine/         
         │       │   └── mapping/               # Doctrine ORM mappings
         │       ├── packages/                  # Package-specific config overrides
@@ -53,7 +51,6 @@ That's all you need. `ModuleExtension` automatically:
 - **Derives the module namespace** by stripping the `\Infrastructure\Symfony` suffix
 - **Registers service definitions** from `Infrastructure/Resources/config/services.yaml`
 - **Configures Doctrine ORM mappings** for entities in `Domain/Model/` (if the `doctrine` extension is available)
-- **Configures API Platform resource mappings** (if the `api_platform` extension is available)
 - **Imports package configuration** from `Infrastructure/Resources/config/packages/*.yaml`
 
 ### Extension Alias
@@ -107,12 +104,6 @@ When a module has a `Domain/Model/` directory and the Doctrine bundle is install
 - **Entity prefix:** `{ModuleNamespace}\Domain\Model`
 
 The mapping directory is created automatically if it doesn't exist.
-
-### API Platform
-
-When API Platform is installed, the extension registers resource mapping directories:
-
-- **Resource directory:** `Infrastructure/Resources/config/api_platform/mapping/` (configurable)
 
 ## Full Example
 

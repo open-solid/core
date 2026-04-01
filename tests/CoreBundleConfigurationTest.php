@@ -43,13 +43,6 @@ class CoreBundleConfigurationTest extends TestCase
                     'relative_path' => '/Presentation/Resources/translations',
                 ],
             ],
-            'api_platform' => [
-                'resources' => [
-                    'mapping' => [
-                        'relative_path' => '/Infrastructure/Resources/config/api_platform/mapping/',
-                    ],
-                ],
-            ],
             'bus' => [
                 'strategy' => 'symfony',
             ],
@@ -86,13 +79,6 @@ class CoreBundleConfigurationTest extends TestCase
                         'relative_path' => '/UI/Resources/translations',
                     ],
                 ],
-                'api_platform' => [
-                    'resources' => [
-                        'mapping' => [
-                            'relative_path' => '/path/to/api_platform',
-                        ],
-                    ],
-                ],
                 'bus' => [
                     'strategy' => 'native',
                 ],
@@ -116,13 +102,6 @@ class CoreBundleConfigurationTest extends TestCase
             'translation' => [
                 'translations' => [
                     'relative_path' => '/UI/Resources/translations',
-                ],
-            ],
-            'api_platform' => [
-                'resources' => [
-                    'mapping' => [
-                        'relative_path' => '/path/to/api_platform',
-                    ],
                 ],
             ],
             'bus' => [
