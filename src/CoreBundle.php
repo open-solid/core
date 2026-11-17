@@ -17,6 +17,7 @@ use Symfony\Component\DependencyInjection\ContainerBuilder;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
 use Symfony\Component\HttpKernel\Bundle\AbstractBundle;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Serializer\Normalizer\NormalizerInterface;
 
 class CoreBundle extends AbstractBundle
 {
@@ -51,6 +52,10 @@ class CoreBundle extends AbstractBundle
             $container->import('../config/services.php');
         }
 
+        if (interface_exists(NormalizerInterface::class)) {
+            $container->import('../config/serializer.php');
+        }
+
         if ('native' === $config['bus']['strategy']) {
             MessageHandlerConfigurator::configure($builder, AsCommandHandler::class, 'cqs.command.handler');
             MessageHandlerConfigurator::configure($builder, AsQueryHandler::class, 'cqs.query.handler');
@@ -65,9 +70,9 @@ class CoreBundle extends AbstractBundle
             $builder->registerForAutoconfiguration(StampTransformer::class)
                 ->addTag('envelope.stamp_transformer');
 
-            MessageHandlerConfigurator::configure($builder, AsCommandHandler::class, 'messenger.message_handler', ['bus' => 'command.bus']);
-            MessageHandlerConfigurator::configure($builder, AsQueryHandler::class, 'messenger.message_handler', ['bus' => 'query.bus']);
-            MessageHandlerConfigurator::configure($builder, AsDomainEventSubscriber::class, 'messenger.message_handler', ['bus' => 'event.bus']);
+            MessageHandlerConfigurator::configure($builder, AsCommandHandler::class, 'messenger.message_handler', ['bus' => 'command.bus'], 'handles');
+            MessageHandlerConfigurator::configure($builder, AsQueryHandler::class, 'messenger.message_handler', ['bus' => 'query.bus'], 'handles');
+            MessageHandlerConfigurator::configure($builder, AsDomainEventSubscriber::class, 'messenger.message_handler', ['bus' => 'event.bus'], 'handles');
 
             $container->import('../config/messenger.php');
         }

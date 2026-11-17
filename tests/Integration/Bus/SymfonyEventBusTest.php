@@ -13,6 +13,7 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Messenger\Envelope;
 use Symfony\Component\Messenger\MessageBusInterface;
+use Symfony\Component\Messenger\Stamp\DispatchAfterCurrentBusStamp;
 use Symfony\Component\Messenger\Stamp\TransportNamesStamp;
 
 class SymfonyEventBusTest extends TestCase
@@ -89,6 +90,47 @@ class SymfonyEventBusTest extends TestCase
         $stamps = $capturedEnvelope->all(TransportNamesStamp::class);
         $this->assertCount(1, $stamps);
         $this->assertSame(['async'], $stamps[0]->getTransportNames());
+    }
+
+    #[Test]
+    public function stampsEachPublishedEventToDispatchAfterCurrentBus(): void
+    {
+        $capturedEnvelope = null;
+        $messageBus = $this->createMock(MessageBusInterface::class);
+        $messageBus->expects($this->once())
+            ->method('dispatch')
+            ->willReturnCallback(function (Envelope $envelope) use (&$capturedEnvelope) {
+                $capturedEnvelope = $envelope;
+
+                return $envelope;
+            });
+
+        $bus = new SymfonyEventBus($messageBus, $this->stampTransformer);
+        $bus->publish(new TestIntegrationEvent('aggregate-1'));
+
+        $this->assertNotNull($capturedEnvelope);
+        $this->assertCount(1, $capturedEnvelope->all(DispatchAfterCurrentBusStamp::class));
+    }
+
+    #[Test]
+    public function afterCurrentBusStampCoexistsWithTransportStamp(): void
+    {
+        $capturedEnvelope = null;
+        $messageBus = $this->createMock(MessageBusInterface::class);
+        $messageBus->expects($this->once())
+            ->method('dispatch')
+            ->willReturnCallback(function (Envelope $envelope) use (&$capturedEnvelope) {
+                $capturedEnvelope = $envelope;
+
+                return $envelope;
+            });
+
+        $bus = new SymfonyEventBus($messageBus, $this->stampTransformer);
+        $bus->publish(new TestAsyncEvent('aggregate-1'));
+
+        $this->assertNotNull($capturedEnvelope);
+        $this->assertCount(1, $capturedEnvelope->all(DispatchAfterCurrentBusStamp::class));
+        $this->assertCount(1, $capturedEnvelope->all(TransportNamesStamp::class));
     }
 
     #[Test]

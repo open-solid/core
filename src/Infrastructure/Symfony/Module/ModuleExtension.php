@@ -95,7 +95,7 @@ abstract class ModuleExtension extends AbstractExtension
         }
 
         if (!\is_dir($dir = $this->path.$config['doctrine']['orm']['mapping']['relative_path'])) {
-            mkdir($dir, 0750, true);
+            mkdir($dir, 0o750, true);
         }
 
         $container->extension('doctrine', [

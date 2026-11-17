@@ -4,11 +4,16 @@ use Doctrine\ORM\EntityManagerInterface;
 use OpenSolid\Core\Application\Command\Bus\CommandBus;
 use OpenSolid\Core\Application\Query\Bus\QueryBus;
 use OpenSolid\Core\Domain\Event\Bus\EventBus;
+use OpenSolid\Core\Domain\Event\Store\AggregateEventPuller;
+use OpenSolid\Core\Domain\Event\Store\AggregateEventRegistry;
 use OpenSolid\Core\Infrastructure\Bus\Command\SymfonyCommandBus;
 use OpenSolid\Core\Infrastructure\Bus\Envelop\Stamp\Transformer\ChainStampTransformer;
 use OpenSolid\Core\Infrastructure\Bus\Envelop\Stamp\Transformer\DefaultStampTransformer;
 use OpenSolid\Core\Infrastructure\Bus\Envelop\Stamp\Transformer\StampTransformer;
 use OpenSolid\Core\Infrastructure\Bus\Event\Middleware\SymfonyEventPublisherMiddleware;
+use OpenSolid\Core\Infrastructure\Bus\Event\Store\AggregateEventPullerChain;
+use OpenSolid\Core\Infrastructure\Bus\Event\Store\DoctrineAggregateEventPuller;
+use OpenSolid\Core\Infrastructure\Bus\Event\Store\InMemoryAggregateEventRegistryPuller;
 use OpenSolid\Core\Infrastructure\Bus\Event\SymfonyEventBus;
 use OpenSolid\Core\Infrastructure\Bus\Query\SymfonyQueryBus;
 use Symfony\Component\DependencyInjection\Loader\Configurator\ContainerConfigurator;
@@ -52,9 +57,27 @@ return static function (ContainerConfigurator $container) {
 
         ->alias(EventBus::class, 'domain.event.bus')
 
-        ->set('domain.event.bus.publisher.middleware', SymfonyEventPublisherMiddleware::class)
+        ->set('domain.event.store.doctrine_aggregate_event_puller', DoctrineAggregateEventPuller::class)
             ->args([
                 service(EntityManagerInterface::class),
+            ])
+            ->tag('domain.event.aggregate_event_puller')
+
+        ->set('domain.event.store.in_memory_aggregate_event_registry_puller', InMemoryAggregateEventRegistryPuller::class)
+            ->tag('domain.event.aggregate_event_puller')
+
+        ->alias(AggregateEventRegistry::class, 'domain.event.store.in_memory_aggregate_event_registry_puller')
+
+        ->set('domain.event.store.aggregate_event_puller.chain', AggregateEventPullerChain::class)
+            ->args([
+                tagged_iterator('domain.event.aggregate_event_puller'),
+            ])
+
+        ->alias(AggregateEventPuller::class, 'domain.event.store.aggregate_event_puller.chain')
+
+        ->set('domain.event.bus.publisher.middleware', SymfonyEventPublisherMiddleware::class)
+            ->args([
+                service(AggregateEventPuller::class),
                 service('domain.event.bus'),
             ])
 

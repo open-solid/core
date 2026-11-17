@@ -17,7 +17,7 @@ trait HandleTrait
 
     private function handle(object $message): mixed
     {
-        /** @psalm-suppress RedundantPropertyInitializationCheck */
+        /* @psalm-suppress RedundantPropertyInitializationCheck */
         if (!isset($this->messageBus)) {
             throw new LogicException(sprintf('You must provide a "%s" instance in the "%s::$messageBus" property, but that property has not been initialized yet.', MessageBusInterface::class, static::class));
         }

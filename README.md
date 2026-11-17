@@ -62,4 +62,5 @@ Each `ModuleExtension` automatically registers services, and Doctrine mappings f
 - **[Domain Events](docs/domain-events.md)** ─ Raise and react to events with automatic publishing after command execution.
 - **[Error Handling](docs/error-handling.md)** ─ Structured domain errors with factory methods and batch error accumulation.
 - **[Collections](docs/collections.md)** ─ Domain repository abstractions built on top of Doctrine Collections.
+- **[Pagination](docs/pagination.md)** ─ Offset and cursor-based pagination with framework-agnostic contracts.
 - **[Modular Architecture](docs/modular-architecture.md)** ─ Convention-based module system with automatic service registration.

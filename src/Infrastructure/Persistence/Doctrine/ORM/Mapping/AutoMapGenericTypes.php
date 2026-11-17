@@ -22,6 +22,10 @@ final readonly class AutoMapGenericTypes
         $reflectionClass = $classMetadata->getReflectionClass();
 
         foreach ($classMetadata->getFieldNames() as $fieldName) {
+            if (!$reflectionClass->hasProperty($fieldName)) {
+                continue;
+            }
+
             $mapping = $classMetadata->getFieldMapping($fieldName);
 
             if ($mapping->declaredField && isset($classMetadata->embeddedClasses[$mapping->declaredField])) {

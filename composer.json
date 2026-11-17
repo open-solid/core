@@ -6,7 +6,7 @@
     "minimum-stability": "stable",
     "require": {
         "php": ">=8.4",
-        "open-solid/bus": "^1.1",
+        "open-solid/bus": "^1.1.5",
         "symfony/uid": "^7.0|^8.0"
     },
     "require-dev": {
@@ -15,8 +15,9 @@
         "friendsofphp/php-cs-fixer": "^3.91",
         "phpstan/phpstan": "^2.1",
         "phpunit/phpunit": "^12.5",
-        "symfony/framework-bundle": "^8.0",
-        "symfony/messenger": "^8.0"
+        "symfony/framework-bundle": "^8.1",
+        "symfony/messenger": "^8.1",
+        "symfony/serializer": "^8.1"
     },
     "config": {
         "sort-packages": true

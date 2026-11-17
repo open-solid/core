@@ -9,23 +9,23 @@ use OpenSolid\Core\Domain\Event\Message\DomainEvent;
 trait InMemoryEventStore
 {
     /**
-     * @var array<class-string<DomainEvent>, DomainEvent>
+     * @var list<DomainEvent>
      */
     private array $domainEvents = [];
 
     final protected function pushDomainEvent(DomainEvent $domainEvent): void
     {
-        $this->domainEvents[$domainEvent::class] ??= $domainEvent;
+        $this->domainEvents[] = $domainEvent;
     }
 
     /**
-     * @return array<DomainEvent>
+     * @return list<DomainEvent>
      */
     final public function pullDomainEvents(): array
     {
         $domainEvents = $this->domainEvents;
         $this->domainEvents = [];
 
-        return array_values($domainEvents);
+        return $domainEvents;
     }
 }

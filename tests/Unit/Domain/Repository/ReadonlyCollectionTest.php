@@ -288,16 +288,4 @@ class ReadonlyCollectionTest extends TestCase
         $this->assertInstanceOf(ReadonlyCollection::class, $result);
         $this->assertCount(1, $result);
     }
-
-    #[Test]
-    public function matchingThrowsOnNonSelectableCollection(): void
-    {
-        $inner = $this->createStub(DoctrineCollection::class);
-        $collection = new ReadonlyCollection($inner);
-
-        $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('Expected a selectable collection');
-
-        $collection->matching(Criteria::create());
-    }
 }

@@ -6,7 +6,6 @@ namespace OpenSolid\Core\Domain\Repository;
 
 use Doctrine\Common\Collections\Collection as DoctrineCollection;
 use Doctrine\Common\Collections\Criteria;
-use Doctrine\Common\Collections\Selectable;
 
 /**
  * @template TKey of array-key
@@ -157,11 +156,7 @@ final readonly class ReadonlyCollection implements Collection
      */
     public function matching(Criteria $criteria): self
     {
-        if (!$this->collection instanceof Selectable) {
-            throw new \LogicException(sprintf('Expected a selectable collection, got "%s".', $this->collection::class));
-        }
-
-        /** @var DoctrineCollection<TKey, TValue>&Selectable<TKey, TValue> $collection */
+        /** @var DoctrineCollection<TKey, TValue> $collection */
         $collection = $this->collection->matching($criteria);
 
         return new self($collection);

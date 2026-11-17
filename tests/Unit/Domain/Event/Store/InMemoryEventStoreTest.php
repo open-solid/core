@@ -60,7 +60,7 @@ class InMemoryEventStoreTest extends TestCase
     }
 
     #[Test]
-    public function sameEventClassIsStoredOnlyOnce(): void
+    public function everyEventOfTheSameClassIsKept(): void
     {
         $entity = new TestEntity();
         $entity->doSomething();
@@ -69,21 +69,25 @@ class InMemoryEventStoreTest extends TestCase
 
         $events = $entity->pullDomainEvents();
 
-        $this->assertCount(1, $events);
+        $this->assertCount(3, $events);
     }
 
     #[Test]
-    public function firstEventOfSameClassIsKept(): void
+    public function eventsAreKeptInTheOrderTheyWerePushed(): void
     {
         $entity = new TestEntity();
         $entity->doSomethingWithValue('first');
+        $entity->doAnotherThing();
         $entity->doSomethingWithValue('second');
 
         $events = $entity->pullDomainEvents();
 
-        $this->assertCount(1, $events);
+        $this->assertCount(3, $events);
         $this->assertInstanceOf(TestSomethingWithValue::class, $events[0]);
         $this->assertSame('first', $events[0]->value);
+        $this->assertInstanceOf(TestAnotherThingHappened::class, $events[1]);
+        $this->assertInstanceOf(TestSomethingWithValue::class, $events[2]);
+        $this->assertSame('second', $events[2]->value);
     }
 
     #[Test]

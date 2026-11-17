@@ -86,11 +86,11 @@ The trait provides two methods:
 
 | Method               | Visibility  | Description                                  |
 |----------------------|-------------|----------------------------------------------|
-| `pushDomainEvent()`  | `protected` | Records a domain event (one per event class) |
+| `pushDomainEvent()`  | `protected` | Records a domain event                       |
 | `pullDomainEvents()` | `public`    | Returns and clears all recorded events       |
 
-> **Note:** `pushDomainEvent()` stores one event per event class. If the same event class is pushed multiple times, only
-> the first instance is kept.
+> **Note:** `pushDomainEvent()` keeps every event it records, in the order it records them. Pushing the same event class
+> twice publishes it twice, so an aggregate that must not repeat an event guards the mutation itself.
 
 ## Event Subscribers
 
@@ -116,6 +116,22 @@ final readonly class SendWelcomeEmailOnUserRegistered
 
 Subscribers are auto-discovered and configured. The handler method parameter type determines which event it subscribes
 to.
+
+A union type subscribes the same class to every event in the union (this also works for `#[AsCommandHandler]` and
+`#[AsQueryHandler]`):
+
+```php
+#[AsDomainEventSubscriber]
+final readonly class RefreshDashboardMetricsOnMarketplaceChange
+{
+    public function __invoke(ListingPublished|ListingSold|ListingExpired $event): void
+    {
+        // ...
+    }
+}
+```
+
+Every member of the union must be a message class; a builtin type such as `string` fails the container build.
 
 ### Routing to Additional Transports
 
